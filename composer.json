@@ -1,0 +1,13 @@
+{
+    "name": "nagatheme/edd-simulated-api",
+    "description": "A simple project that simulates the EDD's licensing API.",
+    "require": {
+        "slim/slim": "^4.11",
+        "slim/psr7": "^1.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    }
+}
