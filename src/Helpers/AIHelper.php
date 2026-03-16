@@ -85,6 +85,16 @@ class AIHelper
     private $nagatheme_ai_vision_model;
 
     /**
+     * @var string Nagatheme Image Generation API Endpoint
+     */
+    private $nagatheme_image_generation_endpoint;
+
+    /**
+     * @var string Nagatheme Image Generation Model
+     */
+    private $nagatheme_image_generation_model;
+
+    /**
      * @var array Cache of working strategies per model (runtime only)
      */
     private static $working_strategies = [];
@@ -100,6 +110,8 @@ class AIHelper
         $this->nagatheme_ai_vision_endpoint = Env::get('NAGATHEME_AI_VISION_ENDPOINT', $this->nagatheme_ai_endpoint);
         $this->nagatheme_ai_vision_model = Env::get('NAGATHEME_AI_VISION_MODEL', 'gpt-4o');
         $this->nagatheme_auth_prefix = Env::get('NAGATHEME_AUTH_PREFIX');
+        $this->nagatheme_image_generation_endpoint = Env::get('NAGATHEME_IMAGE_GENERATION_ENDPOINT', 'https://api.gapgpt.app/v1');
+        $this->nagatheme_image_generation_model = Env::get('NAGATHEME_IMAGE_GENERATION_MODEL', 'gapgpt/z-image');
     }
 
     /**
@@ -1000,6 +1012,83 @@ class AIHelper
         ];
 
         return $payload;
+    }
+
+    /**
+     * Generate an image using the OpenAI-compatible images endpoint.
+     *
+     * @param string $prompt  The image generation prompt.
+     * @param array  $params  Optional parameters: size.
+     *
+     * @return array {success, url, size, output_format, message}
+     */
+    public function generate_image(string $prompt, array $params = []): array
+    {
+        $base_url = rtrim($this->nagatheme_image_generation_endpoint, '/');
+        $api_url  = $base_url . '/images/generations';
+        $model    = $this->nagatheme_image_generation_model;
+
+        $payload = [
+            'model'  => $model,
+            'prompt' => $prompt,
+            'size'   => $params['size'] ?? '1024x1024',
+        ];
+
+        Logger::info('Generating image', [
+            'model' => $model,
+            'size'  => $payload['size'],
+        ]);
+
+        $auth_prefix = $this->nagatheme_auth_prefix;
+        $api_key     = $this->nagatheme_api_key;
+        $auth_value  = $auth_prefix ? "{$auth_prefix} {$api_key}" : $api_key;
+
+        $ch = curl_init($api_url);
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST           => true,
+            CURLOPT_POSTFIELDS     => json_encode($payload),
+            CURLOPT_TIMEOUT        => 120,
+            CURLOPT_CONNECTTIMEOUT => self::CONNECTION_TIMEOUT,
+            CURLOPT_HTTPHEADER     => [
+                'Content-Type: application/json',
+                'Authorization: ' . $auth_value,
+            ],
+        ]);
+
+        $body       = curl_exec($ch);
+        $http_code  = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $curl_error = curl_error($ch);
+        curl_close($ch);
+
+        if ($curl_error) {
+            Logger::error('Image generation cURL error', ['error' => $curl_error]);
+            return ['success' => false, 'message' => "Request failed: {$curl_error}"];
+        }
+
+        $data = json_decode($body, true);
+
+        if ($http_code !== 200) {
+            $error_message = $data['error']['message'] ?? "HTTP {$http_code}";
+            Logger::error('Image generation API error', ['http_code' => $http_code, 'message' => $error_message]);
+            return ['success' => false, 'message' => $error_message];
+        }
+
+        if (empty($data['data']) || !is_array($data['data'])) {
+            Logger::error('Image generation unexpected response', ['body' => $body]);
+            return ['success' => false, 'message' => 'Unexpected response from image generation API.'];
+        }
+
+        $url = $data['data'][0]['url'] ?? null;
+
+        Logger::info('Image generation succeeded', ['url' => $url]);
+
+        return [
+            'success' => true,
+            'url'           => $url,
+            'size'          => $data['size'] ?? ($params['size'] ?? '1024x1024'),
+            'output_format' => $data['output_format'] ?? 'png',
+        ];
     }
 
     /**

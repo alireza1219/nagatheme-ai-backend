@@ -5,6 +5,7 @@ namespace App;
 use App\Controllers\CommentController;
 use App\Controllers\ContentGeneratorController;
 use App\Controllers\ImageAltController;
+use App\Controllers\ImageGenerationController;
 
 // ─────────────────────────────────────────────────────────────────
 //  Nagatheme AI Module — API Routes
@@ -23,4 +24,7 @@ $app->group('/api/v1', function ($group) {
     // ── Image Alt ─────────────────────────────────────────────────────
     $group->post('/image/alt',        [ImageAltController::class, 'generate']);
     $group->post('/image/alt/batch',  [ImageAltController::class, 'batch']);
+
+    // ── Image Generation ──────────────────────────────────────────────
+    $group->post('/image/generate', [ImageGenerationController::class, 'generate']);
 });
