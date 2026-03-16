@@ -39,13 +39,13 @@ class CommentController
     {
         $params = $this->parse_request_body($request);
 
-        $validation = $this->validate_required($params, ['api_key    ', 'comment']);
+        $validation = $this->validate_required($params, ['api_key', 'comment']);
         if ($validation !== true) {
             return $this->json_response($response, $validation, 400);
         }
 
         // Credit check
-        $credit_check = $this->verify_credits($response, $params['api_key    ']);
+        $credit_check = $this->verify_credits($response, $params['api_key']);
         if (!$credit_check['ok']) {
             return $credit_check['response'];
         }
@@ -91,7 +91,7 @@ class CommentController
         // Deduct credits
         $word_count = $ai_response['word_count'];
         $deduction  = $this->deduct_credits(
-            $params['api_key    '],
+            $params['api_key'],
             $word_count,
             $current_balance,
             'Comment Reply'
