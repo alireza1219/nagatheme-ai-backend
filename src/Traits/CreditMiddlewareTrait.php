@@ -7,9 +7,9 @@ use Psr\Http\Message\ResponseInterface as Response;
 
 trait CreditMiddlewareTrait
 {
-    public function verify_credits(Response $response, string $license_key): array
+    public function verify_credits(Response $response, string $api_key): array
     {
-        $balance_result = CreditManager::get_balance($license_key);
+        $balance_result = CreditManager::get_balance($api_key);
 
         if (!$balance_result['success']) {
             return [
@@ -18,7 +18,7 @@ trait CreditMiddlewareTrait
                 'response' => $this->json_response($response, [
                     'success' => false,
                     'error'   => [
-                        'code'    => 'invalid_license',
+                        'code'    => 'invalid_api_key',
                         'message' => $balance_result['message'],
                     ],
                     'data' => null,
@@ -47,9 +47,9 @@ trait CreditMiddlewareTrait
         ];
     }
 
-    public function deduct_credits(string $license_key, int $word_count, int $current_balance, string $note = ''): array
+    public function deduct_credits(string $api_key, int $word_count, int $current_balance, string $note = ''): array
     {
-        $deduct_result = CreditManager::decrease_credits($license_key, $word_count, $note);
+        $deduct_result = CreditManager::decrease_credits($api_key, $word_count, $note);
 
         if ($deduct_result['success']) {
             return ['balance' => $deduct_result['balance'], 'error' => ''];

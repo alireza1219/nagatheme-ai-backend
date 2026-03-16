@@ -12,15 +12,15 @@ class CreditManager
     private static $api_base_url = 'https://nagatheme.com/wp-json/edd-credits/v1';
 
     /**
-     * Get the current credit balance for a license key.
+     * Get the current credit balance for a API key.
      *
-     * @param string $license_key The license key.
+     * @param string $api_key The API key.
      *
      * @return array Response with success status and balance or error.
      */
-    public static function get_balance($license_key)
+    public static function get_balance($api_key)
     {
-        $url = self::$api_base_url . '/balance?license_key=' . urlencode($license_key);
+        $url = self::$api_base_url . '/balance?api_key=' . urlencode($api_key);
 
         $ch = curl_init($url);
         curl_setopt_array($ch, [
@@ -46,8 +46,8 @@ class CreditManager
         if ($http_code === 401) {
             return [
                 'success' => false,
-                'error' => 'invalid_license',
-                'message' => $decoded['message'] ?? 'Invalid license key.',
+                'error' => 'invalid_api_key',
+                'message' => $decoded['message'] ?? 'Invalid API key.',
             ];
         }
 
@@ -67,20 +67,20 @@ class CreditManager
     }
 
     /**
-     * Decrease credits for a license key.
+     * Decrease credits for a API key.
      *
-     * @param string $license_key The license key.
+     * @param string $api_key The API key.
      * @param int    $amount      The amount of credits to deduct.
      * @param string $note        A note explaining the deduction.
      *
      * @return array Response with success status and new balance or error.
      */
-    public static function decrease_credits($license_key, $amount, $note = '')
+    public static function decrease_credits($api_key, $amount, $note = '')
     {
         $url = self::$api_base_url . '/decrease';
 
         $payload = [
-            'license_key' => $license_key,
+            'api_key' => $api_key,
             'amount' => $amount,
             'note' => $note,
         ];
@@ -114,8 +114,8 @@ class CreditManager
         if ($http_code === 401) {
             return [
                 'success' => false,
-                'error' => 'invalid_license',
-                'message' => $decoded['message'] ?? 'Invalid license key.',
+                'error' => 'invalid_api_key',
+                'message' => $decoded['message'] ?? 'Invalid API key.',
             ];
         }
 
@@ -144,16 +144,16 @@ class CreditManager
     }
 
     /**
-     * Get transaction history for a license key.
+     * Get transaction history for a API key.
      *
-     * @param string $license_key The license key.
+     * @param string $api_key The API key.
      * @param int    $limit       Number of transactions to retrieve.
      *
      * @return array Response with success status and transactions or error.
      */
-    public static function get_transactions($license_key, $limit = 10)
+    public static function get_transactions($api_key, $limit = 10)
     {
-        $url = self::$api_base_url . '/transactions?license_key=' . urlencode($license_key) . '&limit=' . (int)$limit;
+        $url = self::$api_base_url . '/transactions?api_key=' . urlencode($api_key) . '&limit=' . (int)$limit;
 
         $ch = curl_init($url);
         curl_setopt_array($ch, [
@@ -179,8 +179,8 @@ class CreditManager
         if ($http_code === 401) {
             return [
                 'success' => false,
-                'error' => 'invalid_license',
-                'message' => $decoded['message'] ?? 'Invalid license key.',
+                'error' => 'invalid_api_key',
+                'message' => $decoded['message'] ?? 'Invalid API key.',
             ];
         }
 

@@ -23,7 +23,7 @@ class CommentController
      * Generate a smart reply to a WordPress comment.
      *
      * POST body:
-     *   license_key  string  (required) Nagatheme license key
+     *   api_key      string  (required) Nagatheme API key
      *   comment      string  (required) The comment text to reply to
      *   post_title   string  (optional) Title of the post being commented on
      *   post_type    string  (optional) WordPress post type, default 'post'
@@ -39,13 +39,13 @@ class CommentController
     {
         $params = $this->parse_request_body($request);
 
-        $validation = $this->validate_required($params, ['license_key', 'comment']);
+        $validation = $this->validate_required($params, ['api_key    ', 'comment']);
         if ($validation !== true) {
             return $this->json_response($response, $validation, 400);
         }
 
         // Credit check
-        $credit_check = $this->verify_credits($response, $params['license_key']);
+        $credit_check = $this->verify_credits($response, $params['api_key    ']);
         if (!$credit_check['ok']) {
             return $credit_check['response'];
         }
@@ -91,7 +91,7 @@ class CommentController
         // Deduct credits
         $word_count = $ai_response['word_count'];
         $deduction  = $this->deduct_credits(
-            $params['license_key'],
+            $params['api_key    '],
             $word_count,
             $current_balance,
             'Comment Reply'

@@ -23,7 +23,7 @@ class ContentGeneratorController
      * Generate content based on a prompt.
      *
      * POST body:
-     *   license_key  string  (required)
+     *   api_key      string  (required)
      *   prompt       string  (required) What to write
      *   tone         string  (optional) professional|casual|persuasive|creative|technical|seo
      *   word_count   int     (optional) Target word count
@@ -39,12 +39,12 @@ class ContentGeneratorController
     {
         $params = $this->parse_request_body($request);
 
-        $validation = $this->validate_required($params, ['license_key', 'prompt']);
+        $validation = $this->validate_required($params, ['api_key', 'prompt']);
         if ($validation !== true) {
             return $this->json_response($response, $validation, 400);
         }
 
-        $credit_check = $this->verify_credits($response, $params['license_key']);
+        $credit_check = $this->verify_credits($response, $params['api_key']);
         if (!$credit_check['ok']) {
             return $credit_check['response'];
         }
@@ -77,7 +77,7 @@ class ContentGeneratorController
         $actual_words = $ai_response['word_count'];
 
         $deduction = $this->deduct_credits(
-            $params['license_key'],
+            $params['api_key'],
             $actual_words,
             $current_balance,
             'Content Generator – ' . substr($params['prompt'], 0, 50)
@@ -93,7 +93,7 @@ class ContentGeneratorController
      * Generate an SEO meta description.
      *
      * POST body:
-     *   license_key string (required)
+     *   api_key     string (required)
      *   content     string (required) Post content or title to base the meta on
      *   keyword     string (optional) Focus keyword
      *   language    string (optional)
@@ -107,12 +107,12 @@ class ContentGeneratorController
     {
         $params = $this->parse_request_body($request);
 
-        $validation = $this->validate_required($params, ['license_key', 'content']);
+        $validation = $this->validate_required($params, ['api_key', 'content']);
         if ($validation !== true) {
             return $this->json_response($response, $validation, 400);
         }
 
-        $credit_check = $this->verify_credits($response, $params['license_key']);
+        $credit_check = $this->verify_credits($response, $params['api_key']);
         if (!$credit_check['ok']) {
             return $credit_check['response'];
         }
@@ -137,7 +137,7 @@ class ContentGeneratorController
         $word_count = $ai_response['word_count'];
 
         $deduction = $this->deduct_credits(
-            $params['license_key'],
+            $params['api_key'],
             $word_count,
             $current_balance,
             'Meta Description'
@@ -153,7 +153,7 @@ class ContentGeneratorController
      * Generate a post excerpt.
      *
      * POST body:
-     *   license_key string (required)
+     *   api_key     string (required)
      *   content     string (required) Full post content
      *   max_words   int    (optional) Default 55
      *   language    string (optional)
@@ -167,12 +167,12 @@ class ContentGeneratorController
     {
         $params = $this->parse_request_body($request);
 
-        $validation = $this->validate_required($params, ['license_key', 'content']);
+        $validation = $this->validate_required($params, ['api_key', 'content']);
         if ($validation !== true) {
             return $this->json_response($response, $validation, 400);
         }
 
-        $credit_check = $this->verify_credits($response, $params['license_key']);
+        $credit_check = $this->verify_credits($response, $params['api_key']);
         if (!$credit_check['ok']) {
             return $credit_check['response'];
         }
@@ -193,7 +193,7 @@ class ContentGeneratorController
         $word_count = $ai_response['word_count'];
 
         $deduction = $this->deduct_credits(
-            $params['license_key'],
+            $params['api_key'],
             $word_count,
             $current_balance,
             'Excerpt Generator'

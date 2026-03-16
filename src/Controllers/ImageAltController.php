@@ -30,7 +30,7 @@ class ImageAltController
      * Generate alt text for an image.
      *
      * POST body (one of image_url OR image_data is required):
-     *   license_key  string (required)
+     *   api_key      string (required)
      *   image_url    string (optional) Public URL of the image
      *   image_data   string (optional) Base64 data URI (data:image/...;base64,...)
      *   language     string (optional) ISO language code, default 'en'
@@ -45,7 +45,7 @@ class ImageAltController
     {
         $params = $this->parse_request_body($request);
 
-        $validation = $this->validate_required($params, ['license_key']);
+        $validation = $this->validate_required($params, ['api_key']);
         if ($validation !== true) {
             return $this->json_response($response, $validation, 400);
         }
@@ -58,7 +58,7 @@ class ImageAltController
             ], 400);
         }
 
-        $credit_check = $this->verify_credits($response, $params['license_key']);
+        $credit_check = $this->verify_credits($response, $params['api_key']);
         if (!$credit_check['ok']) {
             return $credit_check['response'];
         }
@@ -103,7 +103,7 @@ class ImageAltController
         }
 
         $deduction = $this->deduct_credits(
-            $params['license_key'],
+            $params['api_key'],
             max($word_count, 1), // Charge at least 1 credit
             $current_balance,
             'Image Alt Generation'
@@ -119,7 +119,7 @@ class ImageAltController
      * Batch generate alt text for multiple images.
      *
      * POST body:
-     *   license_key string  (required)
+     *   api_key     string  (required)
      *   images      array   (required) Array of {id, image_url} or {id, image_data}
      *   language    string  (optional)
      *
@@ -132,7 +132,7 @@ class ImageAltController
     {
         $params = $this->parse_request_body($request, ['images']);
 
-        $validation = $this->validate_required($params, ['license_key', 'images']);
+        $validation = $this->validate_required($params, ['api_key', 'images']);
         if ($validation !== true) {
             return $this->json_response($response, $validation, 400);
         }
@@ -153,7 +153,7 @@ class ImageAltController
             ], 400);
         }
 
-        $credit_check = $this->verify_credits($response, $params['license_key']);
+        $credit_check = $this->verify_credits($response, $params['api_key']);
         if (!$credit_check['ok']) {
             return $credit_check['response'];
         }
@@ -203,7 +203,7 @@ class ImageAltController
         }
 
         $deduction = $this->deduct_credits(
-            $params['license_key'],
+            $params['api_key'],
             $total_words,
             $current_balance,
             'Image Alt Batch (' . count($params['images']) . ' images)'
