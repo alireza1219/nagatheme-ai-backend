@@ -285,9 +285,59 @@ class AIHelper
             'error' => 'all-strategies-exhausted',
             'message' => 'Unable to complete request. All payload formats failed for this model/provider.',
             'last_error' => $last_error,
-            'strategies_tried' => $tried_strategies,
-            'model_info' => ModelHelper::get_model_info($model),
-        ];
+		    'strategies_tried' => $tried_strategies,
+		    'model_info' => ModelHelper::get_model_info($model),
+		];
+	}
+
+    /**
+     * Make an AI API call with multi-turn conversation history.
+     *
+     * Sends the full conversation history to the AI, enabling context-aware
+     * multi-turn chat for the Writing Assistant feature.
+     *
+     * @param string $system_prompt  The system prompt.
+     * @param string $user_message   The latest user message.
+     * @param array  $history        Prior turns: [['role'=>'user'|'assistant','content'=>string], ...]
+     * @param array  $params         Optional extra parameters.
+     *
+     * @return array Response with success status, content, and word count or error.
+     */
+    public function call_ai_with_history(string $system_prompt, string $user_message, array $history = [], array $params = []): array
+    {
+        $this->params = $params;
+
+        $api_url     = $this->nagatheme_ai_endpoint;
+        $auth_prefix = $this->nagatheme_auth_prefix;
+        $api_key     = $this->nagatheme_api_key;
+        $model       = $this->nagatheme_ai_model;
+
+        $timeout = ModelHelper::get_timeout($model);
+
+        // Build messages: system + history + new user message.
+        $messages = [['role' => 'system', 'content' => $system_prompt]];
+
+        foreach ($history as $turn) {
+            if (isset($turn['role'], $turn['content']) && in_array($turn['role'], ['user', 'assistant'], true)) {
+                $messages[] = ['role' => $turn['role'], 'content' => (string) $turn['content']];
+            }
+        }
+
+        $messages[] = ['role' => 'user', 'content' => $user_message];
+
+        $payload = ['model' => $model, 'messages' => $messages];
+
+        $model_type = ModelHelper::get_model_type($model);
+        if ($model_type === 'reasoning') {
+            $payload['max_completion_tokens'] = 8000;
+        } else {
+            $payload['max_tokens'] = 4096;
+            $payload['temperature'] = 0.7;
+        }
+
+        $result = $this->execute_request_with_retry($api_url, $auth_prefix, $api_key, $payload, $timeout, $model, 'minimal');
+
+        return $result;
     }
 
     /**

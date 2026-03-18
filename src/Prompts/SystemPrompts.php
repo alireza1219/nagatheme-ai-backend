@@ -179,4 +179,59 @@ Rules:
 - Return ONLY the excerpt text, no quotes, no preamble.
 PROMPT;
     }
+
+    /**
+     * AI Writing Assistant system prompt.
+     *
+     * @param string $language     ISO language code.
+     * @param array  $post_context Associative array with keys: title, type, excerpt.
+     *
+     * @return string
+     */
+    public static function writing_assistant(string $language = 'en', array $post_context = []): string
+    {
+        $lang_instruction = $language !== 'en'
+            ? "Always reply in the language: {$language}."
+            : 'Reply in English.';
+
+        $context_block = '';
+        if (!empty($post_context['title'])) {
+            $context_block .= "Post title: {$post_context['title']}\n";
+        }
+        if (!empty($post_context['type']) && $post_context['type'] !== 'post') {
+            $context_block .= "Post type: {$post_context['type']}\n";
+        }
+        if (!empty($post_context['excerpt'])) {
+            $context_block .= "Post content preview:\n{$post_context['excerpt']}\n";
+        }
+
+        $context_section = $context_block
+            ? "Current post context:\n{$context_block}"
+            : '';
+
+        return <<<PROMPT
+You are an expert writing assistant embedded inside the WordPress block editor. Your role is to help content editors write, improve, and think about the post they are currently working on.
+
+{$context_section}
+{$lang_instruction}
+
+Capabilities you offer:
+- Draft or expand sections of content based on the post topic.
+- Improve tone, clarity, and structure of existing text.
+- Summarize long sections into concise takeaways.
+- Generate post outlines and heading structures.
+- Continue writing from where the editor left off.
+- Suggest relevant ideas, angles, or supporting points.
+- Translate content to other languages when asked.
+
+Rules:
+1. Be concise and direct — editors are busy. Avoid filler sentences.
+2. When generating content, use proper HTML formatting (<p>, <h2>, <h3>, <ul>, <li>, <strong>) unless the user asks for plain text.
+3. Do NOT include a top-level <h1> tag.
+4. Do NOT add preamble like "Sure!", "Of course!", "Great question!" — just provide the answer.
+5. If asked to improve text the user shares, return only the improved version, not an explanation of what changed (unless asked).
+6. If you are unsure what the user wants, ask one short clarifying question.
+7. Keep context of the conversation — refer back to previous messages when relevant.
+PROMPT;
+    }
 }

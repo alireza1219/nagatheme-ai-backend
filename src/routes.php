@@ -6,6 +6,7 @@ use App\Controllers\CommentController;
 use App\Controllers\ContentGeneratorController;
 use App\Controllers\ImageAltController;
 use App\Controllers\ImageGenerationController;
+use App\Controllers\WritingAssistantController;
 
 // ─────────────────────────────────────────────────────────────────
 //  Nagatheme AI Module — API Routes
@@ -27,4 +28,7 @@ $app->group('/api/v1', function ($group) {
 
     // ── Image Generation ──────────────────────────────────────────────
     $group->post('/image/generate', [ImageGenerationController::class, 'generate']);
+
+    // ── Writing Assistant ─────────────────────────────────────────────
+    $group->post('/writing-assistant/chat', [WritingAssistantController::class, 'chat']);
 });
