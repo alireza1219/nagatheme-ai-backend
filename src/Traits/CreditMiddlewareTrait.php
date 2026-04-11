@@ -49,7 +49,7 @@ trait CreditMiddlewareTrait
 
     public function deduct_credits(string $api_key, int $word_count, int $current_balance, string $note = ''): array
     {
-        $deduct_result = CreditManager::decrease_credits($api_key, $word_count, $note);
+        $deduct_result = CreditManager::deduct_credits($api_key, $word_count, $note);
 
         if ($deduct_result['success']) {
             return ['balance' => $deduct_result['balance'], 'error' => ''];

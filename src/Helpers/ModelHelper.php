@@ -26,9 +26,7 @@ class ModelHelper
      * @var array
      */
     const REASONING_MODELS = [
-        // ──────────────────────────────────────────────
         // OpenAI o-series
-        // ──────────────────────────────────────────────
         'o1',
         'o1-mini',
         'o1-pro',
@@ -40,9 +38,7 @@ class ModelHelper
         'o4-mini-deep',
         'o4-pro',
 
-        // ──────────────────────────────────────────────
-        // OpenAI GPT-5 family (all reasoning-capable)
-        // ──────────────────────────────────────────────
+        // OpenAI GPT-5
         'gpt-5',
         'gpt-5-mini',
         'gpt-5-nano',
@@ -52,9 +48,7 @@ class ModelHelper
         'gpt-5.2',
         'gpt-5.2-mini',
 
-        // ──────────────────────────────────────────────
         // Google Gemini reasoning models
-        // ──────────────────────────────────────────────
         'gemini-2.5-pro',
         'gemini-2.5-pro-preview',
         'gemini-2.5-flash',
@@ -68,9 +62,7 @@ class ModelHelper
         'gemini-3-flash-preview',
         'gemini-exp-1206',  // Experimental reasoning model
 
-        // ──────────────────────────────────────────────
         // DeepSeek reasoning models
-        // ──────────────────────────────────────────────
         'deepseek-r1',
         'deepseek-r1-0528',
         'deepseek-r1-distill-llama-70b',
@@ -79,17 +71,13 @@ class ModelHelper
         'deepseek-r1-distill-llama-8b',
         'deepseek-r1-distill-qwen-1.5b',
 
-        // ──────────────────────────────────────────────
         // Qwen reasoning models
-        // ──────────────────────────────────────────────
         'qwen3-235b-a22b',
         'qwen3-30b-a3b',
         'qwq-32b',
         'qwen-qwq-32b',
 
-        // ──────────────────────────────────────────────
         // Anthropic Claude reasoning (extended thinking)
-        // ──────────────────────────────────────────────
         'claude-opus-4-6-thinking',
         'claude-opus-4-5-thinking',
         'claude-sonnet-4-5-thinking',
@@ -97,9 +85,7 @@ class ModelHelper
         'claude-sonnet-4-thinking',
         'claude-3-7-sonnet-thinking',
 
-        // ──────────────────────────────────────────────
         // xAI Grok reasoning models
-        // ──────────────────────────────────────────────
         'grok-3-mini',
         'grok-3-mini-fast',
         'grok-4-mini',
@@ -114,41 +100,29 @@ class ModelHelper
      * @var array
      */
     const STANDARD_MODELS = [
-        // ──────────────────────────────────────────────
         // OpenAI GPT-4.1 family
-        // ──────────────────────────────────────────────
         'gpt-4.1',
         'gpt-4.1-mini',
         'gpt-4.1-nano',
 
-        // ──────────────────────────────────────────────
         // OpenAI GPT-4o family
-        // ──────────────────────────────────────────────
         'gpt-4o',
         'gpt-4o-mini',
         'gpt-4o-audio-preview',
         'gpt-4o-realtime-preview',
 
-        // ──────────────────────────────────────────────
         // OpenAI GPT-4 family (legacy)
-        // ──────────────────────────────────────────────
         'gpt-4-turbo',
         'gpt-4',
 
-        // ──────────────────────────────────────────────
         // OpenAI GPT-OSS (open-source)
-        // ──────────────────────────────────────────────
         'gpt-oss',
 
-        // ──────────────────────────────────────────────
         // OpenAI GPT-3.5 family (legacy)
-        // ──────────────────────────────────────────────
         'gpt-3.5-turbo',
         'gpt-3.5-turbo-16k',
 
-        // ──────────────────────────────────────────────
         // Google Gemini standard models
-        // ──────────────────────────────────────────────
         'gemini-2.0-flash',
         'gemini-2.0-flash-exp',
         'gemini-2.0-flash-lite',
@@ -156,9 +130,7 @@ class ModelHelper
         'gemini-1.5-flash',
         'gemini-1.5-flash-8b',
 
-        // ──────────────────────────────────────────────
         // Anthropic Claude 4.x models
-        // ──────────────────────────────────────────────
         'claude-opus-4-6',
         'claude-opus-4-5',
         'claude-sonnet-4-5',
@@ -167,42 +139,32 @@ class ModelHelper
         'claude-opus-4',
         'claude-sonnet-4',
 
-        // ──────────────────────────────────────────────
         // Anthropic Claude 3.x models (legacy)
-        // ──────────────────────────────────────────────
         'claude-3-7-sonnet',
         'claude-3-5-sonnet',
         'claude-3-5-haiku',
         'claude-3-opus',
         'claude-3-haiku',
 
-        // ──────────────────────────────────────────────
         // Meta Llama 4 models
-        // ──────────────────────────────────────────────
         'llama-4-scout',
         'llama-4-maverick',
         'llama-4-behemoth',
 
-        // ──────────────────────────────────────────────
         // Meta Llama 3.x models
-        // ──────────────────────────────────────────────
         'llama-3.3-70b-instruct',
         'llama-3.1-70b-instruct',
         'llama-3.1-8b-instruct',
         'llama-3-70b',
         'llama-3-8b',
 
-        // ──────────────────────────────────────────────
         // DeepSeek standard models
-        // ──────────────────────────────────────────────
         'deepseek-v3',
         'deepseek-v3-0324',
         'deepseek-chat',
         'deepseek-coder',
 
-        // ──────────────────────────────────────────────
         // Mistral models
-        // ──────────────────────────────────────────────
         'mistral-large',
         'mistral-large-3',
         'mistral-large-2',
@@ -216,9 +178,7 @@ class ModelHelper
         'ministral-8b',
         'ministral-14b',
 
-        // ──────────────────────────────────────────────
         // Qwen 3 standard models
-        // ──────────────────────────────────────────────
         'qwen3-0.6b',
         'qwen3-1.7b',
         'qwen3-4b',
@@ -226,9 +186,7 @@ class ModelHelper
         'qwen3-14b',
         'qwen3-32b',
 
-        // ──────────────────────────────────────────────
         // Qwen 2.5 models
-        // ──────────────────────────────────────────────
         'qwen-2.5-72b-instruct',
         'qwen-2.5-coder-32b-instruct',
         'qwen-turbo',
@@ -236,43 +194,33 @@ class ModelHelper
         'qwen-max',
         'qwen3-max',
 
-        // ──────────────────────────────────────────────
         // Microsoft Phi models
-        // ──────────────────────────────────────────────
         'phi-4',
         'phi-4-mini',
         'phi-3.5-mini',
         'phi-3-medium',
 
-        // ──────────────────────────────────────────────
         // Cohere models
-        // ──────────────────────────────────────────────
         'command-r-plus',
         'command-r',
         'command-a',
         'command-a-03-2025',
 
-        // ──────────────────────────────────────────────
         // xAI Grok standard models
-        // ──────────────────────────────────────────────
         'grok-2',
         'grok-3',
         'grok-3-fast',
         'grok-4',
-        'grok-4-fast',        // New fast variant
-        'grok-4-turbo',       // New turbo variant
+        'grok-4-fast',
+        'grok-4-turbo',
         'grok-beta',
 
-        // ──────────────────────────────────────────────
         // Amazon Nova models
-        // ──────────────────────────────────────────────
         'nova-pro-1.0',
         'nova-lite-1.0',
         'nova-micro-1.0',
 
-        // ──────────────────────────────────────────────
         // AI21 Jamba models
-        // ──────────────────────────────────────────────
         'jamba-1.5-large',
         'jamba-1.5-mini',
     ];
@@ -371,10 +319,6 @@ class ModelHelper
         ],
     ];
 
-    // ─────────────────────────────────────────────────────
-    //  .env-aware getters
-    // ─────────────────────────────────────────────────────
-
     /**
      * Get token defaults for the given model type, reading from .env
      * with hardcoded fallbacks.
@@ -424,10 +368,6 @@ class ModelHelper
             ],
         };
     }
-
-    // ─────────────────────────────────────────────────────
-    //  Model detection
-    // ─────────────────────────────────────────────────────
 
     /**
      * Check if a model is a reasoning model.
@@ -498,10 +438,6 @@ class ModelHelper
         }
         return 'unknown';
     }
-
-    // ─────────────────────────────────────────────────────
-    //  Strategy-based Payload Builder
-    // ─────────────────────────────────────────────────────
 
     /**
      * Get the list of payload strategies to try for a model.
@@ -669,10 +605,6 @@ class ModelHelper
 
         return self::build_payload_with_strategy($model, $system_prompt, $user_prompt, $first_strategy, $provider ?? 'openai');
     }
-
-    // ─────────────────────────────────────────────────────
-    //  Error Analysis
-    // ─────────────────────────────────────────────────────
 
     /**
      * Analyze an API error response to determine which parameter caused it.
@@ -879,10 +811,6 @@ class ModelHelper
 
         return false;
     }
-
-    // ─────────────────────────────────────────────────────
-    //  Timeout & Metadata
-    // ─────────────────────────────────────────────────────
 
     /**
      * Get the recommended cURL timeout for a model.

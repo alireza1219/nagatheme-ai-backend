@@ -8,27 +8,25 @@ use App\Controllers\ImageAltController;
 use App\Controllers\ImageGenerationController;
 use App\Controllers\WritingAssistantController;
 
-// ─────────────────────────────────────────────────────────────────
-//  Nagatheme AI Module — API Routes
-//  All routes are prefixed with /api/v1 by the Slim app bootstrap.
-// ─────────────────────────────────────────────────────────────────
+//  Nagatheme AI - API Routes
 
+// API Version 1 routes:
 $app->group('/api/v1', function ($group) {
-    // ── Comment Reply ─────────────────────────────────────────────────
+    // Comment Reply
     $group->post('/comment/reply', [CommentController::class, 'reply']);
 
-    // ── Content Generator ─────────────────────────────────────────────
+    // Content Generator
     $group->post('/content/generate',          [ContentGeneratorController::class, 'generate']);
     $group->post('/content/meta-description',  [ContentGeneratorController::class, 'meta_description']);
     $group->post('/content/excerpt',           [ContentGeneratorController::class, 'excerpt']);
 
-    // ── Image Alt ─────────────────────────────────────────────────────
+    // Image Alt
     $group->post('/image/alt',        [ImageAltController::class, 'generate']);
     $group->post('/image/alt/batch',  [ImageAltController::class, 'batch']);
 
-    // ── Image Generation ──────────────────────────────────────────────
+    // Image Generation
     $group->post('/image/generate', [ImageGenerationController::class, 'generate']);
 
-    // ── Writing Assistant ─────────────────────────────────────────────
+    // Writing Assistant
     $group->post('/writing-assistant/chat', [WritingAssistantController::class, 'chat']);
 });
